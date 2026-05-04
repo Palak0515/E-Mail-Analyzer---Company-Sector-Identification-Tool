@@ -1,0 +1,141 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<title>Email Analyzer</title>
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#e9ecef;
+    margin:0;
+    padding:0;
+}
+.container{
+    width:750px;
+    max-width:95%;
+    margin:80px auto;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0px 0px 10px rgba(0,0,0,0.1);
+}
+h2{
+    margin-bottom:15px;
+}
+textarea{
+    width:100%;
+    padding:10px;
+    font-size:15px;
+    border:1px solid #ccc;
+    border-radius:5px;
+    resize:none;
+}
+button{
+    margin-top:15px;
+    padding:10px 25px;
+    background:#1a8f2d;
+    color:white;
+    border:none;
+    font-size:15px;
+    cursor:pointer;
+    border-radius:5px;
+}
+button:hover{
+    background:#157a24;
+}
+#summary{
+    margin-top: 15px;
+    font-weight: bold;
+    color: #333;
+    font-size: 16px;
+}
+#tableContainer{
+    display:none;
+    overflow-x:auto;
+    margin-top:20px;
+}
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+th{
+    background:#4CAF50;
+    color:white;
+    padding:10px;
+}
+td{
+    padding:10px;
+    border:1px solid #ddd;
+    text-align:center;
+    word-break:break-word;
+}
+tr:nth-child(even){
+    background:#f2f2f2;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h2>Enter Email(s)</h2>
+<textarea id="emailInput" rows="4" placeholder="Enter emails line by line"></textarea>
+<br>
+<button onclick="analyzeEmails()">Analyze</button>
+
+<p id="summary"></p>
+
+<div id="tableContainer">
+<table>
+<thead>
+<tr>
+<th>Email</th>
+<th>Domain</th>
+<th>Domain Type</th>
+<th>Person</th>
+<th>University</th>
+<th>Company</th>
+</tr>
+</thead>
+<tbody id="resultTable"></tbody>
+</table>
+<br>
+<button onclick="downloadExcel()">Download Excel</button>
+</div>
+</div>
+
+<script>
+function analyzeEmails(){
+    let emails = document.getElementById("emailInput").value;
+
+    fetch("/analyze",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({emails:emails})
+    })
+    .then(res=>res.json())
+    .then(response=>{
+        let data = response.data;
+        let table = document.getElementById("resultTable");
+        let container = document.getElementById("tableContainer");
+        let summary = document.getElementById("summary");
+
+        table.innerHTML="";
+        data.forEach(item=>{
+            let row = `
+            <tr>
+            <td>${item.email}</td>
+            <td>${item.domain}</td>
+            <td>${item.domain_type}</td>
+            <td>${item.person}</td>
+            <td>${item.university}</td>
+            <td>${item.company}</td>
+            </tr>`;
+            table.innerHTML += row;});
+
+        summary.innerHTML = `Total Valid Emails: ${response.total_valid} | Total Invalid Emails: ${response.total_invalid}`;
+        container.style.display="block";});}
+
+function downloadExcel(){
+    window.location.href = "/download";}
+</script>
+</body>
+</html>
