@@ -16,10 +16,6 @@ This project is a web-based Email Analyzer that  processes a list of email addre
 ## Technologies Used
 
 - Python
-- Flask
-- Scikit-learn
-- Pandas
-- NumPy
 - HTML
 - CSS
 - JavaScript
