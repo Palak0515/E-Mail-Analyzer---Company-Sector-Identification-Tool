@@ -28,6 +28,16 @@ This project is a web-based Email Analyzer that  processes a list of email addre
 4. Predict the company sector
 5. Display the result
 
+## How to run
+
+1. Download or clone the project from GitHub.
+2. Make sure Python is installed on your system.
+3. Open the project folder in VS Code or any other code editor.
+4. Install the required Python libraries using the requirements.txt file.
+5. Run the Flask application.
+6. Open the local URL shown in the terminal in your web browser.
+7. Enter the email text and check the predicted company sector.
+
 ## Future Enhancements
 
 - Spam detection
