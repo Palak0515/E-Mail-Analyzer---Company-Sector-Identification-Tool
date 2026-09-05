@@ -2,7 +2,8 @@
 <html>
 <head>
 <title>Email Analyzer</title>
-    <link rel = "stylesheet" href = "style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"> </script>
 </head>
 <body>
 <div class="container">
@@ -31,41 +32,5 @@
 <button onclick="downloadExcel()">Download Excel</button>
 </div>
 </div>
-
-<script>
-function analyzeEmails(){
-    let emails = document.getElementById("emailInput").value;
-
-    fetch("/analyze",{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({emails:emails})
-    })
-    .then(res=>res.json())
-    .then(response=>{
-        let data = response.data;
-        let table = document.getElementById("resultTable");
-        let container = document.getElementById("tableContainer");
-        let summary = document.getElementById("summary");
-
-        table.innerHTML="";
-        data.forEach(item=>{
-            let row = `
-            <tr>
-            <td>${item.email}</td>
-            <td>${item.domain}</td>
-            <td>${item.domain_type}</td>
-            <td>${item.person}</td>
-            <td>${item.university}</td>
-            <td>${item.company}</td>
-            </tr>`;
-            table.innerHTML += row;});
-
-        summary.innerHTML = `Total Valid Emails: ${response.total_valid} | Total Invalid Emails: ${response.total_invalid}`;
-        container.style.display="block";});}
-
-function downloadExcel(){
-    window.location.href = "/download";}
-</script>
 </body>
 </html>
