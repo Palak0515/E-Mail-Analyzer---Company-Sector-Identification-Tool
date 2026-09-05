@@ -4,3 +4,4 @@ __pycache__/
 .idea/
 .vs/
 .env
+email_results.xlsx
